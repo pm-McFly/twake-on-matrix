@@ -86,7 +86,7 @@ class SettingsProfileView extends StatelessWidget {
               builder: (_) {
                 return SettingsProfileViewMobile(
                   client: controller.client,
-                  settingsProfileUIState: controller.settingsProfileUIState,
+                  settingsProfileUIState: controller.pickAvatarUIState,
                   onTapAvatar: controller.onTapAvatarInMobile,
                   onTapMultipleAccountsButton: (multipleAccounts) =>
                       controller.onBottomButtonTap(
@@ -105,8 +105,7 @@ class SettingsProfileView extends StatelessWidget {
                             controller.getListProfileMobile[index],
                         title: controller.getListProfileMobile[index]
                             .getTitle(context),
-                        settingsProfileUIState:
-                            controller.settingsProfileUIState,
+                        settingsProfileUIState: controller.pickAvatarUIState,
                         settingsProfilePresentation:
                             SettingsProfilePresentation(
                           settingsProfileType: controller
@@ -137,6 +136,8 @@ class SettingsProfileView extends StatelessWidget {
                     },
                     itemCount: controller.getListProfileMobile.length,
                   ),
+                  onImageLoaded: controller.updateMatrixFile,
+                  currentProfile: controller.currentProfile,
                 );
               },
             ),
@@ -146,7 +147,8 @@ class SettingsProfileView extends StatelessWidget {
               key: settingsProfileViewWebKey,
               builder: (_) {
                 return SettingsProfileViewWeb(
-                  settingsProfileUIState: controller.settingsProfileUIState,
+                  currentProfile: controller.currentProfile,
+                  settingsProfileUIState: controller.pickAvatarUIState,
                   client: controller.client,
                   menuChildren: controller.listContextMenuBuilder(context),
                   menuController: controller.menuController,
@@ -155,8 +157,7 @@ class SettingsProfileView extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return SettingsProfileItemBuilder(
-                        settingsProfileUIState:
-                            controller.settingsProfileUIState,
+                        settingsProfileUIState: controller.pickAvatarUIState,
                         settingsProfileEnum:
                             controller.getListProfileBasicInfo[index],
                         title: controller.getListProfileBasicInfo[index]
@@ -186,13 +187,13 @@ class SettingsProfileView extends StatelessWidget {
                     },
                     itemCount: controller.getListProfileBasicInfo.length,
                   ),
+                  onImageLoaded: controller.updateMatrixFile,
                   workIdentitiesInfoWidget: ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return SettingsProfileItemBuilder(
-                        settingsProfileUIState:
-                            controller.settingsProfileUIState,
+                        settingsProfileUIState: controller.pickAvatarUIState,
                         settingsProfileEnum:
                             controller.getListProfileWorkIdentitiesInfo[index],
                         title: controller

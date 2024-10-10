@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:fluffychat/app_state/failure.dart';
 import 'package:fluffychat/app_state/success.dart';
-import 'package:fluffychat/pages/settings_dashboard/settings_profile/settings_profile_state/get_avatar_ui_state.dart';
-import 'package:fluffychat/pages/settings_dashboard/settings_profile/settings_profile_state/get_profile_ui_state.dart';
 import 'package:fluffychat/pages/settings_dashboard/settings_profile/settings_profile_view_web_style.dart';
 import 'package:fluffychat/presentation/extensions/client_extension.dart';
+import 'package:fluffychat/presentation/model/pick_avatar_state.dart';
 import 'package:fluffychat/widgets/avatar/avatar.dart';
 import 'package:fluffychat/widgets/avatar/avatar_style.dart';
+import 'package:fluffychat/widgets/stream_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -19,13 +19,17 @@ class SettingsProfileViewWeb extends StatelessWidget {
   final Client client;
   final List<Widget>? menuChildren;
   final MenuController? menuController;
+  final Function(MatrixFile) onImageLoaded;
+  final ValueNotifier<Profile?> currentProfile;
 
   const SettingsProfileViewWeb({
     super.key,
+    required this.currentProfile,
     required this.basicInfoWidget,
     required this.workIdentitiesInfoWidget,
     required this.client,
     required this.settingsProfileUIState,
+    required this.onImageLoaded,
     this.menuController,
     this.menuChildren,
   });
@@ -87,11 +91,9 @@ class SettingsProfileViewWeb extends StatelessWidget {
                                   (failure) => child!,
                                   (success) {
                                     if (success
-                                        is GetAvatarInBytesUIStateSuccess) {
-                                      if (success.filePickerResult == null ||
-                                          success.filePickerResult?.files.single
-                                                  .bytes ==
-                                              null) {
+                                        is GetAvatarOnWebUIStateSuccess) {
+                                      if (success.matrixFile?.readStream ==
+                                          null) {
                                         return child!;
                                       }
                                       return ClipOval(
@@ -100,57 +102,49 @@ class SettingsProfileViewWeb extends StatelessWidget {
                                             SettingsProfileViewWebStyle
                                                 .radiusImageMemory,
                                           ),
-                                          child: Image.memory(
-                                            success.filePickerResult!.files
-                                                .single.bytes!,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return const Center(
-                                                child:
-                                                    Icon(Icons.error_outline),
-                                              );
-                                            },
+                                          child: StreamImageViewer(
+                                            matrixFile: success.matrixFile!,
+                                            onImageLoaded: onImageLoaded,
                                           ),
-                                        ),
-                                      );
-                                    }
-                                    if (success is GetProfileUIStateSuccess) {
-                                      final displayName =
-                                          success.profile.displayName ??
-                                              client.mxid(context).localpart ??
-                                              client.mxid(context);
-                                      return Material(
-                                        elevation: Theme.of(context)
-                                                .appBarTheme
-                                                .scrolledUnderElevation ??
-                                            4,
-                                        shadowColor: Theme.of(context)
-                                            .appBarTheme
-                                            .shadowColor,
-                                        shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                            color:
-                                                Theme.of(context).dividerColor,
-                                          ),
-                                          borderRadius: BorderRadius.circular(
-                                            AvatarStyle.defaultSize,
-                                          ),
-                                        ),
-                                        child: Avatar(
-                                          mxContent: success.profile.avatarUrl,
-                                          name: displayName,
-                                          size: SettingsProfileViewWebStyle
-                                              .avatarSize,
-                                          fontSize: SettingsProfileViewWebStyle
-                                              .avatarFontSize,
                                         ),
                                       );
                                     }
                                     return child!;
                                   },
                                 ),
-                                child: const SizedBox.shrink(),
+                                child: ValueListenableBuilder(
+                                  valueListenable: currentProfile,
+                                  builder: (context, profile, _) {
+                                    final displayName = profile?.displayName ??
+                                        client.mxid(context).localpart ??
+                                        client.mxid(context);
+                                    return Material(
+                                      elevation: Theme.of(context)
+                                              .appBarTheme
+                                              .scrolledUnderElevation ??
+                                          4,
+                                      shadowColor: Theme.of(context)
+                                          .appBarTheme
+                                          .shadowColor,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                          color: Theme.of(context).dividerColor,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          AvatarStyle.defaultSize,
+                                        ),
+                                      ),
+                                      child: Avatar(
+                                        mxContent: profile?.avatarUrl,
+                                        name: displayName,
+                                        size: SettingsProfileViewWebStyle
+                                            .avatarSize,
+                                        fontSize: SettingsProfileViewWebStyle
+                                            .avatarFontSize,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                               Positioned(
                                 bottom: SettingsProfileViewWebStyle

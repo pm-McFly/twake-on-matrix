@@ -1,15 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:fluffychat/app_state/failure.dart';
 import 'package:fluffychat/app_state/success.dart';
-import 'package:fluffychat/pages/settings_dashboard/settings_profile/settings_profile_state/get_avatar_ui_state.dart';
 import 'package:fluffychat/pages/settings_dashboard/settings_profile/settings_profile_state/get_clients_ui_state.dart';
-import 'package:fluffychat/pages/settings_dashboard/settings_profile/settings_profile_state/get_profile_ui_state.dart';
 import 'package:fluffychat/pages/settings_dashboard/settings_profile/settings_profile_view_mobile_style.dart';
 import 'package:fluffychat/presentation/extensions/client_extension.dart';
+import 'package:fluffychat/presentation/model/pick_avatar_state.dart';
 import 'package:fluffychat/presentation/multiple_account/twake_chat_presentation_account.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
 import 'package:fluffychat/widgets/avatar/avatar.dart';
 import 'package:fluffychat/widgets/avatar/avatar_style.dart';
+import 'package:fluffychat/widgets/stream_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 import 'package:matrix/matrix.dart';
@@ -29,15 +29,19 @@ class SettingsProfileViewMobile extends StatelessWidget {
   final MenuController? menuController;
   final ValueNotifier<Either<Failure, Success>> settingsMultiAccountsUIState;
   final Client client;
+  final Function(MatrixFile) onImageLoaded;
+  final ValueNotifier<Profile?> currentProfile;
 
   const SettingsProfileViewMobile({
     super.key,
     required this.settingsProfileOptions,
+    required this.currentProfile,
     required this.onTapAvatar,
     required this.settingsProfileUIState,
     required this.client,
     required this.onTapMultipleAccountsButton,
     required this.settingsMultiAccountsUIState,
+    required this.onImageLoaded,
     this.menuChildren,
     this.menuController,
   });
@@ -67,7 +71,7 @@ class SettingsProfileViewMobile extends StatelessWidget {
                     builder: (context, uiState, child) => uiState.fold(
                       (failure) => child!,
                       (success) {
-                        if (success is GetAvatarInStreamUIStateSuccess &&
+                        if (success is GetAvatarOnMobileUIStateSuccess &&
                             PlatformInfos.isMobile) {
                           if (success.assetEntity == null) {
                             return child!;
@@ -107,11 +111,9 @@ class SettingsProfileViewMobile extends StatelessWidget {
                             ),
                           );
                         }
-                        if (success is GetAvatarInBytesUIStateSuccess &&
+                        if (success is GetAvatarOnWebUIStateSuccess &&
                             PlatformInfos.isWeb) {
-                          if (success.filePickerResult == null ||
-                              success.filePickerResult?.files.single.bytes ==
-                                  null) {
+                          if (success.matrixFile?.readStream == null) {
                             return child!;
                           }
                           return ClipOval(
@@ -119,50 +121,47 @@ class SettingsProfileViewMobile extends StatelessWidget {
                               size: const Size.fromRadius(
                                 AvatarStyle.defaultSize,
                               ),
-                              child: Image.memory(
-                                success.filePickerResult!.files.single.bytes!,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Center(
-                                    child: Icon(Icons.error_outline),
-                                  );
-                                },
+                              child: StreamImageViewer(
+                                matrixFile: success.matrixFile!,
+                                onImageLoaded: onImageLoaded,
                               ),
-                            ),
-                          );
-                        }
-                        if (success is GetProfileUIStateSuccess) {
-                          final displayName = success.profile.displayName ??
-                              client.mxid(context).localpart ??
-                              client.mxid(context);
-                          return Material(
-                            elevation: Theme.of(context)
-                                    .appBarTheme
-                                    .scrolledUnderElevation ??
-                                4,
-                            shadowColor:
-                                Theme.of(context).appBarTheme.shadowColor,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color: Theme.of(context).dividerColor,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                AvatarStyle.defaultSize,
-                              ),
-                            ),
-                            child: Avatar(
-                              mxContent: success.profile.avatarUrl,
-                              name: displayName,
-                              size: SettingsProfileViewMobileStyle.avatarSize,
-                              fontSize:
-                                  SettingsProfileViewMobileStyle.avatarFontSize,
                             ),
                           );
                         }
                         return child!;
                       },
                     ),
-                    child: const SizedBox.shrink(),
+                    child: ValueListenableBuilder(
+                      valueListenable: currentProfile,
+                      builder: (context, profile, _) {
+                        final displayName = profile?.displayName ??
+                            client.mxid(context).localpart ??
+                            client.mxid(context);
+                        return Material(
+                          elevation: Theme.of(context)
+                                  .appBarTheme
+                                  .scrolledUnderElevation ??
+                              4,
+                          shadowColor:
+                              Theme.of(context).appBarTheme.shadowColor,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: Theme.of(context).dividerColor,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              AvatarStyle.defaultSize,
+                            ),
+                          ),
+                          child: Avatar(
+                            mxContent: profile?.avatarUrl,
+                            name: displayName,
+                            size: SettingsProfileViewMobileStyle.avatarSize,
+                            fontSize:
+                                SettingsProfileViewMobileStyle.avatarFontSize,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                   Positioned(
                     bottom: SettingsProfileViewMobileStyle.positionedBottomSize,

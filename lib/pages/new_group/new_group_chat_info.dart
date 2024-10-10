@@ -8,6 +8,7 @@ import 'package:fluffychat/domain/app_state/room/upload_content_state.dart';
 import 'package:fluffychat/pages/new_group/new_group_chat_info_view.dart';
 import 'package:fluffychat/pages/new_group/new_group_info_controller.dart';
 import 'package:fluffychat/presentation/mixins/common_media_picker_mixin.dart';
+import 'package:fluffychat/presentation/mixins/pick_avatar_mixin.dart';
 import 'package:fluffychat/presentation/mixins/single_image_picker_mixin.dart';
 import 'package:fluffychat/presentation/model/contact/presentation_contact.dart';
 import 'package:fluffychat/utils/extension/build_context_extension.dart';
@@ -17,7 +18,6 @@ import 'package:fluffychat/widgets/matrix.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 import 'package:collection/collection.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:fluffychat/di/global/get_it_initializer.dart';
 import 'package:fluffychat/domain/model/room/create_new_group_chat_request.dart';
 import 'package:fluffychat/domain/usecase/room/create_new_group_chat_interactor.dart';
@@ -42,7 +42,7 @@ class NewGroupChatInfo extends StatefulWidget {
 }
 
 class NewGroupChatInfoController extends State<NewGroupChatInfo>
-    with CommonMediaPickerMixin, SingleImagePickerMixin {
+    with CommonMediaPickerMixin, SingleImagePickerMixin, PickAvatarMixin {
   final enableEncryptionNotifier = ValueNotifier(false);
   final haveGroupNameNotifier = ValueNotifier(false);
   final createRoomStateNotifier =
@@ -54,7 +54,7 @@ class NewGroupChatInfoController extends State<NewGroupChatInfo>
       getIt.get<CreateNewGroupChatInteractor>();
   final groupNameTextEditingController = TextEditingController();
   final avatarAssetEntityNotifier = ValueNotifier<AssetEntity?>(null);
-  final avatarFilePickerNotifier = ValueNotifier<FilePickerResult?>(null);
+  final avatarFilePickerNotifier = ValueNotifier<MatrixFile?>(null);
 
   final groupNameFocusNode = FocusNode();
   StreamSubscription? createNewGroupChatInteractorStreamSubscription;
@@ -214,12 +214,12 @@ class NewGroupChatInfoController extends State<NewGroupChatInfo>
 
   void uploadAvatarNewGroupChatInBytes({
     required Client matrixClient,
-    required FilePickerResult filePickerResult,
+    required MatrixFile matrixFile,
   }) {
     uploadContentWebInteractor
         .execute(
           matrixClient: matrixClient,
-          filePickerResult: filePickerResult,
+          matrixFile: matrixFile,
         )
         .listen(
           (event) => _handleUploadAvatarNewGroupChatOnData(context, event),
@@ -255,23 +255,8 @@ class NewGroupChatInfoController extends State<NewGroupChatInfo>
     );
   }
 
-  void _getImageOnWeb(
-    BuildContext context,
-  ) async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
-    Logs().d(
-      'NewGroupController::_getImageOnWeb(): FilePickerResult - $result',
-    );
-    if (result == null || result.files.single.bytes == null) {
-      return;
-    } else {
-      avatarFilePickerNotifier.value = result;
-      Logs().d(
-        'NewGroupController::_getImageOnWeb(): AvatarWebNotifier - ${avatarFilePickerNotifier.value}',
-      );
-    }
+  void updateAvatarFilePicker(MatrixFile matrixFile) {
+    avatarFilePickerNotifier.value = matrixFile;
   }
 
   void showImagesPickerAction({
@@ -281,7 +266,7 @@ class NewGroupChatInfoController extends State<NewGroupChatInfo>
       return;
     }
     if (PlatformInfos.isWeb) {
-      _getImageOnWeb(context);
+      pickAvatarImageOnWeb();
       return;
     }
     final currentPermissionPhotos = await getCurrentMediaPermission(context);
@@ -327,6 +312,7 @@ class NewGroupChatInfoController extends State<NewGroupChatInfo>
   @override
   void initState() {
     listenGroupNameChanged();
+    listenToPickAvatarUIState(context);
     contactsList = widget.contactsList;
     super.initState();
   }
@@ -334,13 +320,14 @@ class NewGroupChatInfoController extends State<NewGroupChatInfo>
   @override
   void dispose() {
     super.dispose();
+    disposePickAvatarMixin();
     haveGroupNameNotifier.dispose();
     enableEncryptionNotifier.dispose();
     avatarAssetEntityNotifier.dispose();
-    avatarFilePickerNotifier.dispose();
     createNewGroupChatInteractorStreamSubscription?.cancel();
     groupNameTextEditingController.dispose();
     groupNameFocusNode.dispose();
+    avatarFilePickerNotifier.dispose();
   }
 
   @override

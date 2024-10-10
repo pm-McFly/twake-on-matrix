@@ -122,6 +122,8 @@ abstract class AppConfig {
 
   static String? issueId;
 
+  static int defaultMaxUploadAvtarSizeInBytes = 10 * (1024 * 1024);
+
   static const String appGridConfigurationPath =
       "configurations/app_dashboard.json";
 
@@ -236,6 +238,10 @@ abstract class AppConfig {
     }
     if (json['platform'] is String?) {
       platform = json['platform'];
+    }
+    if (json['default_max_upload_avatar_size_in_bytes'] is int) {
+      defaultMaxUploadAvtarSizeInBytes =
+          json['default_max_upload_avatar_size_in_bytes'];
     }
   }
 }
