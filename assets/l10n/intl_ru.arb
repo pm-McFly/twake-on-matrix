@@ -820,27 +820,27 @@
     "type": "text",
     "placeholders": {}
   },
-  "groupDescription": "Описание чата",
+  "groupDescription": "Описание группового чата",
   "@groupDescription": {
     "type": "text",
     "placeholders": {}
   },
-  "groupDescriptionHasBeenChanged": "Описание чата изменено",
+  "groupDescriptionHasBeenChanged": "Описание группового чата изменено",
   "@groupDescriptionHasBeenChanged": {
     "type": "text",
     "placeholders": {}
   },
-  "groupIsPublic": "Публичный чат",
+  "groupIsPublic": "Публичный групповой чат",
   "@groupIsPublic": {
     "type": "text",
     "placeholders": {}
   },
-  "groups": "Чаты",
+  "groups": "Групповые чаты",
   "@groups": {
     "type": "text",
     "placeholders": {}
   },
-  "groupWith": "Чат с {displayname}",
+  "groupWith": "Групповой чат с {displayname}",
   "@groupWith": {
     "type": "text",
     "placeholders": {
@@ -1209,11 +1209,6 @@
   },
   "notifications": "Уведомления",
   "@notifications": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "notificationsEnabledForThisAccount": "Уведомления включены для этой учётной записи",
-  "@notificationsEnabledForThisAccount": {
     "type": "text",
     "placeholders": {}
   },
@@ -2372,7 +2367,7 @@
   "@custom": {},
   "dehydrateShare": "Это ваш личный экспорт FluffyChat. Убедитесь, что вы не потеряете его и держите его в тайне.",
   "@dehydrateShare": {},
-  "updateAvailable": "Доступно обновление для FluffyChat",
+  "updateAvailable": "Доступно обновление для Twake Chat",
   "@updateAvailable": {},
   "updateNow": "Обновить в фоновом режиме",
   "@updateNow": {},
@@ -2525,7 +2520,7 @@
       "user": {}
     }
   },
-  "startNewChatMessage": "Всегда приятно пообщаться с друзьями или коллегами.\nНапишите им в личные сообщения, создайте чат или присоединитесь к уже существующему.",
+  "startNewChatMessage": "Всегда приятно пообщаться с друзьями или коллегами.\nНапишите им в личные сообщения, создайте групповой чат или получите приглашение в уже существующий.",
   "@startNewChatMessage": {},
   "inactive": "Не активирован",
   "@inactive": {},
@@ -2558,8 +2553,6 @@
   "@upTo100000Members": {},
   "persistentChatHistory": "История чата сохраняется",
   "@persistentChatHistory": {},
-  "multiInteractionThreadedDiscussion": "Многофункциональные треды с обсуждениями",
-  "@multiInteractionThreadedDiscussion": {},
   "addMember": "Добавить участников",
   "@addMember": {},
   "profile": "Профиль",
@@ -2673,7 +2666,7 @@
   "@roomAvatarMaxFileSize": {},
   "location": "Местоположение",
   "@location": {},
-  "externalContactMessage": "Некоторых пользователей, которых вы хотите добавить, нет в ваших контактах. Вы хотите пригласить их?",
+  "externalContactMessage": "Некоторых пользователей, которых вы хотите добавить, нет в ваших контактах. Пригласить их?",
   "@externalContactMessage": {},
   "roomAvatarMaxFileSizeLong": "Размер аватара должен быть меньше {max}",
   "@roomAvatarMaxFileSizeLong": {
@@ -2683,13 +2676,13 @@
   },
   "continueProcess": "Продолжить",
   "@continueProcess": {},
-  "youAreUploadingPhotosDoYouWantToCancelOrContinue": "Ошибка загрузки изображений! Вы все еще хотите продолжать создавать чат?",
+  "youAreUploadingPhotosDoYouWantToCancelOrContinue": "Не удалось загрузить изображение! Продолжить создание группового чата?",
   "@youAreUploadingPhotosDoYouWantToCancelOrContinue": {},
   "today": "Сегодня",
   "@today": {},
   "yesterday": "Вчера",
   "@yesterday": {},
-  "hasCreatedAGroupChat": "создал чат “{groupName}”",
+  "hasCreatedAGroupChat": "создал групповой чат “{groupName}”",
   "@hasCreatedAGroupChat": {
     "type": "text",
     "placeholders": {
@@ -2735,8 +2728,6 @@
     "type": "text",
     "placeholders": {}
   },
-  "settingsHelpSubtitle": "Помощь, обратная связь, политика конфиденциальности.",
-  "@settingsHelpSubtitle": {},
   "errorPreviewingFile": "Предварительный просмотр недоступен",
   "@errorPreviewingFile": {},
   "unread": "Не прочтено",
@@ -2757,8 +2748,6 @@
   "@errorPageButton": {},
   "playVideo": "Проиграть",
   "@playVideo": {},
-  "settingsPrivacyAndSecuritySubtitle": "Блокировка контактов, исчезающие сообщения.",
-  "@settingsPrivacyAndSecuritySubtitle": {},
   "copiedMatrixIdToClipboard": "Matrix ID скопирован в буфер обмена.",
   "@copiedMatrixIdToClipboard": {},
   "privacyAndSecurity": "Конфиденциальность и безопасность",
@@ -2767,10 +2756,6 @@
   "@matrixId": {},
   "roomCreationFailed": "Не удалось создать комнату",
   "@roomCreationFailed": {},
-  "settingsAppLanguageSubtitle": "Выберите, на каком языке вы хотите использовать Twake Chat.",
-  "@settingsAppLanguageSubtitle": {},
-  "settingsNotificationAndSoundsSubtitle": "Настройте уведомления от Twake – предварительный просмотр сообщений, звук, время и т. д.",
-  "@settingsNotificationAndSoundsSubtitle": {},
   "mute": "Отключить уведомления",
   "@mute": {},
   "notInAChatYet": "У вас еще нет чатов",
@@ -2801,8 +2786,6 @@
   "@downloadImageSuccess": {},
   "chatInfo": "Информация",
   "@chatInfo": {},
-  "settingsDevicesSubtitle": "Контролируйте вход и выход на любом устройстве.",
-  "@settingsDevicesSubtitle": {},
   "thisMessageHasBeenEncrypted": "Это сообщение зашифровано",
   "@thisMessageHasBeenEncrypted": {},
   "media": "Медиа",
@@ -2825,10 +2808,6 @@
   "@cannotUploadKey": {},
   "notificationAndSounds": "Уведомления и звук",
   "@notificationAndSounds": {},
-  "settingsChatSubtitle": "Внешний вид, темы, обои, история чата.",
-  "@settingsChatSubtitle": {},
-  "settingsChatFoldersSubtitle": "Создавайте папки для разных групп чатов и быстро переключайтесь между ними.",
-  "@settingsChatFoldersSubtitle": {},
   "done": "Готово",
   "@done": {},
   "copyImageSuccess": "Изображение скопировано",
@@ -3236,5 +3215,29 @@
   "@thursday": {
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "message": "Сообщение",
+  "@message": {},
+  "enable_notifications": "Включить уведомления",
+  "@enable_notifications": {},
+  "fileTooBig": "Выбранный файл слишком большой. Загрузите файл размером менее {maxSize} МБ.",
+  "@fileTooBig": {
+    "placeholders": {
+      "maxSize": {
+        "type": "int"
+      }
+    }
+  },
+  "disable_notifications": "Отключить уведомления",
+  "@disable_notifications": {},
+  "logoutDialogWarning": "Вы потеряете доступ к зашифрованным сообщениям. Рекомендуем активировать резервную копию чатов перед выходом",
+  "@logoutDialogWarning": {},
+  "callViaCarrier": "Позвонить через Carrier",
+  "@callViaCarrier": {},
+  "thisFieldCannotBeBlank": "Это поле не может быть пустым",
+  "@thisFieldCannotBeBlank": {},
+  "copyNumber": "Скопировать номер",
+  "@copyNumber": {},
+  "scanQrCodeToJoin": "Установка мобильного приложения позволит вам связаться с людьми из адресной книги телефона; ваши чаты синхронизируются между устройствами",
+  "@scanQrCodeToJoin": {}
 }

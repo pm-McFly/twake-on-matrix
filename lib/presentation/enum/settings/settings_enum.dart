@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 
 enum SettingEnum {
   profile,
@@ -11,6 +12,7 @@ enum SettingEnum {
   devices,
   help,
   about,
+  deleteAccount,
   logout;
 
   String titleSettings(BuildContext context) {
@@ -20,7 +22,7 @@ enum SettingEnum {
       case SettingEnum.privacyAndSecurity:
         return L10n.of(context)!.privacyAndSecurity;
       case SettingEnum.notificationAndSounds:
-        return L10n.of(context)!.notificationAndSounds;
+        return L10n.of(context)!.notifications;
       case SettingEnum.chatFolders:
         return L10n.of(context)!.chatFolders;
       case SettingEnum.appLanguage:
@@ -31,29 +33,10 @@ enum SettingEnum {
         return L10n.of(context)!.help;
       case SettingEnum.about:
         return L10n.of(context)!.about;
+      case SettingEnum.deleteAccount:
+        return L10n.of(context)!.deleteAccount;
       case SettingEnum.logout:
         return L10n.of(context)!.logout;
-      default:
-        return '';
-    }
-  }
-
-  String subtitleSettings(BuildContext context) {
-    switch (this) {
-      case SettingEnum.chatSettings:
-        return L10n.of(context)!.settingsChatSubtitle;
-      case SettingEnum.privacyAndSecurity:
-        return L10n.of(context)!.settingsPrivacyAndSecuritySubtitle;
-      case SettingEnum.notificationAndSounds:
-        return L10n.of(context)!.settingsNotificationAndSoundsSubtitle;
-      case SettingEnum.chatFolders:
-        return L10n.of(context)!.settingsChatFoldersSubtitle;
-      case SettingEnum.appLanguage:
-        return L10n.of(context)!.settingsAppLanguageSubtitle;
-      case SettingEnum.devices:
-        return L10n.of(context)!.settingsDevicesSubtitle;
-      case SettingEnum.help:
-        return L10n.of(context)!.settingsHelpSubtitle;
       default:
         return '';
     }
@@ -77,6 +60,8 @@ enum SettingEnum {
         return Icons.question_mark;
       case SettingEnum.about:
         return Icons.privacy_tip_outlined;
+      case SettingEnum.deleteAccount:
+        return Icons.delete_outline;
       case SettingEnum.logout:
         return Icons.logout_outlined;
       default:
@@ -84,5 +69,25 @@ enum SettingEnum {
     }
   }
 
-  bool get isHideTrailingIcon => this == SettingEnum.logout;
+  Color? iconColor(BuildContext context) {
+    switch (this) {
+      case SettingEnum.deleteAccount:
+      case SettingEnum.logout:
+        return Theme.of(context).colorScheme.error;
+      default:
+        return LinagoraRefColors.material().tertiary[30];
+    }
+  }
+
+  Color? titleColor(BuildContext context) {
+    switch (this) {
+      case SettingEnum.deleteAccount:
+        return Theme.of(context).colorScheme.error;
+      default:
+        return LinagoraSysColors.material().onSurface;
+    }
+  }
+
+  bool get isHideTrailingIcon =>
+      this == SettingEnum.logout || this == SettingEnum.deleteAccount;
 }

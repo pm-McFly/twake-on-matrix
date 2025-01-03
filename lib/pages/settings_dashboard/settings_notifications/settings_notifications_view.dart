@@ -1,29 +1,44 @@
-import 'package:fluffychat/pages/settings_dashboard/settings/settings_app_bar.dart';
+import 'package:fluffychat/di/global/get_it_initializer.dart';
 import 'package:fluffychat/utils/dialog/twake_dialog.dart';
 import 'package:fluffychat/utils/localized_exception_extension.dart';
+import 'package:fluffychat/utils/responsive/responsive_utils.dart';
+import 'package:fluffychat/widgets/app_bars/twake_app_bar.dart';
+import 'package:fluffychat/widgets/app_bars/twake_app_bar_style.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:go_router/go_router.dart';
 import 'package:linagora_design_flutter/linagora_design_flutter.dart';
-
 import 'package:matrix/matrix.dart';
-
 import 'package:fluffychat/widgets/layouts/max_width_body.dart';
 import 'settings_notifications.dart';
 
 class SettingsNotificationsView extends StatelessWidget {
   final SettingsNotificationsController controller;
+  final responsive = getIt.get<ResponsiveUtils>();
 
-  const SettingsNotificationsView(this.controller, {super.key});
+  SettingsNotificationsView(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: LinagoraSysColors.material().onPrimary,
-      appBar: SettingsAppBar(
-        title: Text(L10n.of(context)!.notifications),
+      appBar: TwakeAppBar(
+        title: L10n.of(context)!.notifications,
         context: context,
+        centerTitle: true,
+        withDivider: true,
+        leading: responsive.isMobile(context)
+            ? Padding(
+                padding: TwakeAppBarStyle.leadingIconPadding,
+                child: IconButton(
+                  tooltip: L10n.of(context)!.back,
+                  icon: const Icon(Icons.chevron_left_outlined),
+                  onPressed: () => context.pop(),
+                  iconSize: TwakeAppBarStyle.leadingIconSize,
+                ),
+              )
+            : const SizedBox.shrink(),
       ),
       body: MaxWidthBody(
         withScrolling: true,
@@ -39,7 +54,9 @@ class SettingsNotificationsView extends StatelessWidget {
                 SwitchListTile.adaptive(
                   value: !Matrix.of(context).client.allPushNotificationsMuted,
                   title: Text(
-                    L10n.of(context)!.notificationsEnabledForThisAccount,
+                    Matrix.of(context).client.allPushNotificationsMuted
+                        ? L10n.of(context)!.enable_notifications
+                        : L10n.of(context)!.disable_notifications,
                   ),
                   onChanged: (_) =>
                       TwakeDialog.showFutureLoadingDialogFullScreen(
@@ -55,9 +72,8 @@ class SettingsNotificationsView extends StatelessWidget {
                   ListTile(
                     title: Text(
                       L10n.of(context)!.pushRules,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
+                      style: ListItemStyle.titleTextStyle(
+                        fontFamily: 'Inter',
                       ),
                     ),
                   ),
@@ -73,9 +89,8 @@ class SettingsNotificationsView extends StatelessWidget {
                 ListTile(
                   title: Text(
                     L10n.of(context)!.devices,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.bold,
+                    style: ListItemStyle.titleTextStyle(
+                      fontFamily: 'Inter',
                     ),
                   ),
                 ),

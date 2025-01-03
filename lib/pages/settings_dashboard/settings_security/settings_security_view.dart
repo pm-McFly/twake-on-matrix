@@ -1,25 +1,43 @@
-import 'package:fluffychat/pages/settings_dashboard/settings/settings_app_bar.dart';
+import 'package:fluffychat/di/global/get_it_initializer.dart';
+import 'package:fluffychat/utils/responsive/responsive_utils.dart';
+import 'package:fluffychat/widgets/app_bars/twake_app_bar.dart';
+import 'package:fluffychat/widgets/app_bars/twake_app_bar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:fluffychat/utils/beautify_string_extension.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
 import 'package:fluffychat/widgets/layouts/max_width_body.dart';
 import 'package:fluffychat/widgets/matrix.dart';
+import 'package:go_router/go_router.dart';
 import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 import 'settings_security.dart';
 
 class SettingsSecurityView extends StatelessWidget {
   final SettingsSecurityController controller;
+  final responsive = getIt.get<ResponsiveUtils>();
 
-  const SettingsSecurityView(this.controller, {super.key});
+  SettingsSecurityView(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: LinagoraSysColors.material().onPrimary,
-      appBar: SettingsAppBar(
-        title: Text(L10n.of(context)!.security),
+      appBar: TwakeAppBar(
+        title: L10n.of(context)!.security,
         context: context,
+        centerTitle: true,
+        withDivider: true,
+        leading: responsive.isMobile(context)
+            ? Padding(
+                padding: TwakeAppBarStyle.leadingIconPadding,
+                child: IconButton(
+                  tooltip: L10n.of(context)!.back,
+                  icon: const Icon(Icons.chevron_left_outlined),
+                  onPressed: () => context.pop(),
+                  iconSize: TwakeAppBarStyle.leadingIconSize,
+                ),
+              )
+            : const SizedBox.shrink(),
       ),
       body: ListTileTheme(
         // TODO: remove when the color scheme is updated
@@ -57,7 +75,6 @@ class SettingsSecurityView extends StatelessWidget {
               //   onTap: () => context.go('/3pid'),
               // ),
               if (Matrix.of(context).client.encryption != null) ...{
-                const Divider(thickness: 1),
                 if (PlatformInfos.isMobile)
                   ListTile(
                     leading: const Icon(Icons.lock_outlined),
@@ -78,7 +95,6 @@ class SettingsSecurityView extends StatelessWidget {
                   ),
                 ),
               },
-              const Divider(height: 1),
               //TODO #1734: Remove dehydrate and delete account
               // ListTile(
               //   leading: const Icon(Icons.tap_and_play),

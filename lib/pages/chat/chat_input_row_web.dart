@@ -42,11 +42,13 @@ class ChatInputRowWeb extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
         children: [
           TwakeIconButton(
             tooltip: L10n.of(context)!.more,
             paddingAll: 0.0,
-            margin: const EdgeInsets.all(12.0),
+            margin: const EdgeInsets.all(10.0),
+            iconColor: LinagoraSysColors.material().tertiary,
             icon: Icons.add_circle_outline,
             size: ChatInputRowStyle.chatInputRowMoreBtnSize,
             onTap: onTapMoreBtn,
@@ -79,8 +81,8 @@ class ChatInputRowWeb extends StatelessWidget {
                   valueListenable: emojiPickerNotifier,
                   builder: (context, showEmojiPicker, child) {
                     return TwakeIconButton(
-                      paddingAll:
-                          ChatInputRowStyle.chatInputRowPaddingBtnMobile,
+                      iconColor: LinagoraSysColors.material().tertiary,
+                      paddingAll: ChatInputRowStyle.chatInputRowPaddingBtnWeb,
                       tooltip: L10n.of(context)!.emojis,
                       onTap: showEmojiPicker ? onKeyboardAction : onEmojiAction,
                       icon: showEmojiPicker ? Icons.keyboard : Icons.tag_faces,

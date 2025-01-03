@@ -61,23 +61,25 @@ class ChatAppBarTitle extends StatelessWidget {
       onTap: isArchived ? null : onPushDetails,
       child: Row(
         children: [
-          Stack(
-            children: [
-              Hero(
-                tag: 'content_banner',
-                child: Avatar(
-                  fontSize: ChatAppBarTitleStyle.avatarFontSize,
-                  mxContent: room!.avatar,
-                  name: roomName ??
-                      room!.getLocalizedDisplayname(
-                        MatrixLocals(L10n.of(context)!),
-                      ),
-                  size: ChatAppBarTitleStyle.avatarSize(context),
+          Padding(
+            padding: ChatAppBarTitleStyle.avatarPadding,
+            child: Stack(
+              children: [
+                Hero(
+                  tag: 'content_banner',
+                  child: Avatar(
+                    fontSize: ChatAppBarTitleStyle.avatarFontSize,
+                    mxContent: room!.avatar,
+                    name: roomName ??
+                        room!.getLocalizedDisplayname(
+                          MatrixLocals(L10n.of(context)!),
+                        ),
+                    size: ChatAppBarTitleStyle.avatarSize(context),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(width: 8.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +88,7 @@ class ChatAppBarTitle extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    if (room?.encrypted == true)
+                    if (room?.encrypted == true) ...[
                       Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: SvgPicture.asset(
@@ -95,7 +97,8 @@ class ChatAppBarTitle extends StatelessWidget {
                           height: 16,
                         ),
                       ),
-                    const SizedBox(width: 4),
+                      const SizedBox(width: 4),
+                    ],
                     Flexible(
                       child: Text(
                         roomName ??

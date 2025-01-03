@@ -1,6 +1,5 @@
 import 'package:fluffychat/domain/model/room/room_extension.dart';
 import 'package:fluffychat/pages/chat_list/chat_list_item_title_style.dart';
-import 'package:fluffychat/presentation/decorators/chat_list/title_text_style_decorator/title_text_style_view.dart';
 import 'package:fluffychat/presentation/mixins/chat_list_item_mixin.dart';
 import 'package:fluffychat/pages/chat_list/chat_list_item_style.dart';
 import 'package:fluffychat/resource/image_paths.dart';
@@ -45,8 +44,9 @@ class ChatListItemTitle extends StatelessWidget with ChatListItemMixin {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         softWrap: false,
-                        style:
-                            ChatLitTitleTextStyleView.textStyle.textStyle(room),
+                        style: ListItemStyle.titleTextStyle(
+                          fontFamily: 'Inter',
+                        ),
                       ),
                     ),
                   ),

@@ -6,9 +6,7 @@ import 'package:fluffychat/utils/matrix_sdk_extensions/matrix_locals.dart';
 import 'package:fluffychat/widgets/mxc_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
-import 'package:linagora_design_flutter/colors/linagora_ref_colors.dart';
-import 'package:linagora_design_flutter/colors/linagora_sys_colors.dart';
-import 'package:linagora_design_flutter/style/linagora_text_style.dart';
+import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 import 'package:matrix/matrix.dart';
 
 mixin ChatListItemMixin {
@@ -44,9 +42,9 @@ mixin ChatListItemMixin {
           softWrap: false,
           maxLines: isGroup ? 1 : 2,
           overflow: TextOverflow.ellipsis,
-          style: LinagoraTextStyle.material().bodyMedium3.copyWith(
-                color: LinagoraRefColors.material().tertiary[30],
-              ),
+          style: ListItemStyle.subtitleTextStyle(
+            fontFamily: 'Inter',
+          ),
         );
       },
     );
@@ -56,12 +54,9 @@ mixin ChatListItemMixin {
     final displayedTypingText = "$typingText…";
     return Text(
       displayedTypingText,
-      style: LinagoraTextStyle.material().bodyMedium2.merge(
-            TextStyle(
-              overflow: TextOverflow.ellipsis,
-              color: LinagoraRefColors.material().tertiary[30],
-            ),
-          ),
+      style: ListItemStyle.subtitleTextStyle(
+        fontFamily: 'Inter',
+      ),
       maxLines: 2,
       softWrap: true,
     );
@@ -141,13 +136,15 @@ mixin ChatListItemMixin {
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               softWrap: false,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: LinagoraSysColors.material().onSurface,
-                  ),
+              style: ListItemStyle.subtitleTextStyle(
+                fontFamily: 'Inter',
+              ).copyWith(
+                color: LinagoraSysColors.material().onSurface,
+              ),
             ),
             room.lastEvent?.messageType == MessageTypes.Image ||
                     room.lastEvent?.messageType == MessageTypes.Video
-                ? chatlistItemMediaPreviewSubTitle(
+                ? chatListItemMediaPreviewSubTitle(
                     context,
                     room,
                   )
@@ -156,9 +153,9 @@ mixin ChatListItemMixin {
                     softWrap: false,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: LinagoraTextStyle.material().bodyMedium3.copyWith(
-                          color: LinagoraRefColors.material().tertiary[30],
-                        ),
+                    style: ListItemStyle.subtitleTextStyle(
+                      fontFamily: 'Inter',
+                    ),
                   ),
           ],
         );
@@ -166,7 +163,7 @@ mixin ChatListItemMixin {
     );
   }
 
-  Widget chatlistItemMediaPreviewSubTitle(
+  Widget chatListItemMediaPreviewSubTitle(
     BuildContext context,
     Room room,
   ) {
@@ -202,12 +199,63 @@ mixin ChatListItemMixin {
             room.lastEvent!.messageType == MessageTypes.Image
                 ? L10n.of(context)!.photo
                 : L10n.of(context)!.video,
-            style: LinagoraTextStyle.material()
-                .bodyMedium3
-                .copyWith(color: LinagoraRefColors.material().tertiary[30]),
+            style: ListItemStyle.subtitleTextStyle(
+              fontFamily: 'Inter',
+            ),
           ),
         ),
       ],
     );
+  }
+
+  Color? notificationColor({
+    required BuildContext context,
+    required Room room,
+  }) {
+    /// highlightCount or Invitation
+    if (room.highlightCount > 0 || room.membership == Membership.invite) {
+      return Theme.of(context).colorScheme.primary;
+    }
+
+    if (hasNewMessage(room)) {
+      return _handleNotificationColorHasNewMessage(
+        room,
+        context,
+      );
+    }
+
+    if (room.markedUnread) {
+      return _handleNotificationColorMarkedUnread(
+        context: context,
+        room: room,
+      );
+    }
+    return Colors.transparent;
+  }
+
+  bool hasNewMessage(Room room) {
+    return room.notificationCount > 0 || room.hasNewMessages;
+  }
+
+  Color? _handleNotificationColorHasNewMessage(
+    Room room,
+    BuildContext context,
+  ) {
+    if (room.pushRuleState == PushRuleState.mentionsOnly) {
+      return LinagoraRefColors.material().tertiary[30];
+    } else {
+      return Theme.of(context).colorScheme.primary;
+    }
+  }
+
+  Color? _handleNotificationColorMarkedUnread({
+    required BuildContext context,
+    required Room room,
+  }) {
+    if (room.pushRuleState == PushRuleState.mentionsOnly) {
+      return LinagoraRefColors.material().tertiary[30];
+    } else {
+      return Theme.of(context).colorScheme.primary;
+    }
   }
 }

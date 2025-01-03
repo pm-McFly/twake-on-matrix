@@ -1,4 +1,3 @@
-import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/pages/search/recent_item_widget_style.dart';
 import 'package:fluffychat/presentation/extensions/room_summary_extension.dart';
 import 'package:fluffychat/presentation/extensions/search/presentation_search_extensions.dart';
@@ -30,19 +29,16 @@ class RecentItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(AppConfig.borderRadius),
-      clipBehavior: Clip.hardEdge,
-      color: Colors.transparent,
-      child: Theme(
-        data: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
-        child: ListTile(
-          contentPadding: RecentItemStyle.paddingRecentItem,
-          title: _buildInformationWidget(context),
-          onTap: onTap,
+    return TwakeInkWell(
+      onTap: onTap,
+      child: SizedBox(
+        height: RecentItemStyle.recentItemHeight,
+        child: TwakeListItem(
+          height: RecentItemStyle.recentItemHeight,
+          child: Padding(
+            padding: RecentItemStyle.paddingRecentItem,
+            child: _buildInformationWidget(context),
+          ),
         ),
       ),
     );
@@ -116,13 +112,9 @@ class _GroupChatInformation extends StatelessWidget {
             children: [
               _SearchHighlightText(
                 text: recentChatPresentationSearch.displayName ?? "",
-                style: Theme.of(context).textTheme.titleMedium?.merge(
-                      TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        letterSpacing: 0.15,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
+                style: ListItemStyle.titleTextStyle(
+                  fontFamily: 'Inter',
+                ),
                 searchWord: searchKeyword,
               ),
               Text(
@@ -130,13 +122,9 @@ class _GroupChatInformation extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 softWrap: false,
-                style: Theme.of(context).textTheme.bodyMedium?.merge(
-                      TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        letterSpacing: 0.15,
-                        color: LinagoraRefColors.material().tertiary[30],
-                      ),
-                    ),
+                style: ListItemStyle.subtitleTextStyle(
+                  fontFamily: 'Inter',
+                ),
               ),
             ],
           ),
@@ -202,24 +190,16 @@ class _DirectChatInformation extends StatelessWidget {
             children: [
               _SearchHighlightText(
                 text: recentChatPresentationSearch.displayName ?? "",
-                style: Theme.of(context).textTheme.titleMedium?.merge(
-                      TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        letterSpacing: 0.15,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
+                style: ListItemStyle.titleTextStyle(
+                  fontFamily: 'Inter',
+                ),
                 searchWord: searchKeyword,
               ),
               _SearchHighlightText(
                 text: recentChatPresentationSearch.directChatMatrixID ?? "",
-                style: Theme.of(context).textTheme.bodyMedium?.merge(
-                      TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        letterSpacing: 0.15,
-                        color: LinagoraRefColors.material().tertiary[30],
-                      ),
-                    ),
+                style: ListItemStyle.subtitleTextStyle(
+                  fontFamily: 'Inter',
+                ),
                 searchWord: searchKeyword,
               ),
             ],
@@ -268,15 +248,9 @@ class _ContactInformation extends StatelessWidget {
                   Expanded(
                     child: _SearchHighlightText(
                       text: contactPresentationSearch.displayName ?? "",
-                      style: Theme.of(context).textTheme.titleMedium?.merge(
-                            TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              letterSpacing: 0.15,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
-                          ),
+                      style: ListItemStyle.titleTextStyle(
+                        fontFamily: 'Inter',
+                      ),
                       searchWord: searchKeyword,
                     ),
                   ),
@@ -297,25 +271,17 @@ class _ContactInformation extends StatelessWidget {
                   if (contactPresentationSearch.matrixId != null)
                     _SearchHighlightText(
                       text: contactPresentationSearch.matrixId ?? "",
-                      style: Theme.of(context).textTheme.bodyMedium?.merge(
-                            TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              letterSpacing: 0.15,
-                              color: LinagoraRefColors.material().tertiary[30],
-                            ),
-                          ),
+                      style: ListItemStyle.subtitleTextStyle(
+                        fontFamily: 'Inter',
+                      ),
                       searchWord: searchKeyword,
                     ),
                   if (contactPresentationSearch.email != null)
                     _SearchHighlightText(
                       text: contactPresentationSearch.email ?? "",
-                      style: Theme.of(context).textTheme.bodyMedium?.merge(
-                            TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              letterSpacing: 0.15,
-                              color: LinagoraRefColors.material().tertiary[30],
-                            ),
-                          ),
+                      style: ListItemStyle.subtitleTextStyle(
+                        fontFamily: 'Inter',
+                      ),
                       searchWord: searchKeyword,
                     ),
                 ],

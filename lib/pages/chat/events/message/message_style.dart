@@ -10,7 +10,7 @@ class MessageStyle {
   static ResponsiveUtils responsiveUtils = getIt.get<ResponsiveUtils>();
 
   static const double heightDivider = 1.0;
-  static final bubbleBorderRadius = BorderRadius.circular(20);
+  static final bubbleBorderRadius = BorderRadius.circular(16);
   static final errorStatusPlaceHolderWidth = 16 * AppConfig.bubbleSizeFactor;
   static final errorStatusPlaceHolderHeight = 16 * AppConfig.bubbleSizeFactor;
   static const double avatarSize = 40;
@@ -104,6 +104,10 @@ class MessageStyle {
         top: 4.0 * AppConfig.bubbleSizeFactor,
       );
 
+  static const EdgeInsets paddingAvatar = EdgeInsets.only(
+    right: 8.0,
+  );
+
   static EdgeInsetsDirectional paddingMessageContainer(
     bool displayTime,
     BuildContext context,
@@ -117,7 +121,6 @@ class MessageStyle {
         nextEvent,
         event,
       ),
-      start: 8,
       end: selected || responsiveUtils.isDesktop(context) ? 8 : 0,
     );
   }
@@ -139,11 +142,19 @@ class MessageStyle {
       );
 
   static EdgeInsetsDirectional get paddingSwipeMessage =>
-      const EdgeInsetsDirectional.symmetric(horizontal: 12.0);
+      const EdgeInsetsDirectional.symmetric(horizontal: 16.0);
 
   static EdgeInsetsDirectional get paddingDividerUnreadMessage =>
       const EdgeInsetsDirectional.only(top: 16.0);
   static const double pushpinIconSize = 14.0;
 
   static const double paddingAllPushpin = 0;
+  static const Color borderColorReceivedBubble = Color(0xFFEBEDF0);
+  static MainAxisAlignment messageAlignment(
+    Event event,
+    BuildContext context,
+  ) =>
+      responsiveUtils.isMobile(context) && event.isOwnMessage
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start;
 }

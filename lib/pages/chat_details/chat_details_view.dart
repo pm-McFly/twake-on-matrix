@@ -1,7 +1,9 @@
 import 'package:fluffychat/pages/chat_details/chat_details_view_style.dart';
 import 'package:fluffychat/presentation/extensions/room_summary_extension.dart';
+import 'package:fluffychat/widgets/app_bars/twake_app_bar.dart';
 import 'package:fluffychat/widgets/avatar/avatar.dart';
 import 'package:fluffychat/widgets/avatar/avatar_style.dart';
+import 'package:fluffychat/widgets/twake_components/twake_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:linagora_design_flutter/avatar/round_avatar_style.dart';
@@ -36,44 +38,20 @@ class ChatDetailsView extends StatelessWidget {
         return Scaffold(
           floatingActionButton: _AddMembersButton(controller: controller),
           backgroundColor: LinagoraSysColors.material().onPrimary,
-          appBar: AppBar(
-            backgroundColor: LinagoraSysColors.material().onPrimary,
-            automaticallyImplyLeading: false,
-            bottom: PreferredSize(
-              preferredSize: const Size(double.infinity, 1),
-              child: Container(
-                color: LinagoraStateLayer(
-                  LinagoraSysColors.material().surfaceTint,
-                ).opacityLayer1,
-                height: 1,
-              ),
+          appBar: TwakeAppBar(
+            title: L10n.of(context)!.groupInformation,
+            leading: TwakeIconButton(
+              paddingAll: 8,
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onTap: controller.widget.closeRightColumn,
+              icon: controller.widget.isInStack
+                  ? Icons.chevron_left_outlined
+                  : Icons.close,
             ),
-            title: Padding(
-              padding: ChatDetailViewStyle.navigationAppBarPadding,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: ChatDetailViewStyle.backIconPadding,
-                    child: IconButton(
-                      splashColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onPressed: controller.widget.closeRightColumn,
-                      icon: controller.widget.isInStack
-                          ? const Icon(Icons.arrow_back_ios)
-                          : const Icon(Icons.close),
-                    ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      L10n.of(context)!.groupInformation,
-                      style: Theme.of(context).textTheme.titleLarge,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            centerTitle: true,
+            withDivider: true,
             actions: [
               IconButton(
                 splashColor: Colors.transparent,
@@ -83,6 +61,7 @@ class ChatDetailsView extends StatelessWidget {
                 icon: const Icon(Icons.edit_outlined),
               ),
             ],
+            context: context,
           ),
           body: NestedScrollView(
             physics: const ClampingScrollPhysics(),
@@ -95,7 +74,7 @@ class ChatDetailsView extends StatelessWidget {
                   sliver: SliverAppBar(
                     backgroundColor: LinagoraSysColors.material().onPrimary,
                     toolbarHeight:
-                        ChatDetailViewStyle.toolbarHeightSliverAppBar,
+                        ChatDetailViewStyle.groupToolbarHeightSliverAppBar,
                     title: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,

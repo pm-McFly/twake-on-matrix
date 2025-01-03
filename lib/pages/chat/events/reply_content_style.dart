@@ -1,8 +1,11 @@
 import 'package:fluffychat/config/app_config.dart';
+import 'package:fluffychat/di/global/get_it_initializer.dart';
+import 'package:fluffychat/utils/responsive/responsive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 
 class ReplyContentStyle {
+  static ResponsiveUtils responsive = getIt.get<ResponsiveUtils>();
   static const double fontSizeDisplayName = AppConfig.messageFontSize * 0.76;
   static const double fontSizeDisplayContent = AppConfig.messageFontSize * 0.88;
   static const double replyContentSize = fontSizeDisplayContent * 2;
@@ -20,9 +23,9 @@ class ReplyContentStyle {
   ) {
     return BoxDecoration(
       color: ownMessage
-          ? LinagoraRefColors.material().primary[95]
-          : Theme.of(context).colorScheme.surfaceTint.withOpacity(0.08),
-      borderRadius: BorderRadius.circular(12),
+          ? LinagoraSysColors.material().primaryContainer
+          : LinagoraSysColors.material().onSurface.withOpacity(0.08),
+      borderRadius: BorderRadius.circular(8.0),
     );
   }
 
@@ -59,6 +62,7 @@ class ReplyContentStyle {
 
   static EdgeInsetsDirectional get marginReplyContent =>
       EdgeInsetsDirectional.symmetric(
+        horizontal: 8,
         vertical: 4.0 * AppConfig.bubbleSizeFactor,
       );
 

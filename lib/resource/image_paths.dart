@@ -50,6 +50,14 @@ class ImagePaths {
   static String get icGoTo => _getImagePath('ic_goto.svg');
   static String get icShowInChat => _getImagePath('ic_show_in_chat.svg');
   static String get lottieTwakeLoading => _getAssetPath('twake_loading.json');
+  static String get icPersonCheck => _getImagePath('ic_person_check.svg');
+  static String get icTwakeImageLogoBeta =>
+      _getImagePath('ic_twake_image_beta.svg');
+  static String get logoPng => _getAssetPath('logo.png');
+  static String get appStore => _getImagePath('app_store.svg');
+  static String get googlePlay => _getImagePath('google_play.svg');
+  static String get icTwakeSupport =>
+      getConfigurationImagePath('ic_twake_support.svg');
 
   static String _getImagePath(String imageName) {
     return AssetsPaths.images + imageName;

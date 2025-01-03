@@ -1,5 +1,4 @@
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/pages/chat/chat.dart';
 import 'package:fluffychat/pages/chat/chat_event_list.dart';
 import 'package:fluffychat/pages/chat/chat_loading_view.dart';
@@ -15,6 +14,7 @@ import 'package:fluffychat/widgets/connection_status_header.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
+import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 import 'package:matrix/matrix.dart';
 import 'chat_emoji_picker.dart';
 import 'chat_input_row.dart';
@@ -30,45 +30,54 @@ class ChatViewBody extends StatelessWidget with MessageContentMixin {
       onDragDone: (details) => controller.handleDragDone(details),
       onDragEntered: controller.onDragEntered,
       onDragExited: controller.onDragExited,
-      child: Stack(
-        children: <Widget>[
-          if (Matrix.of(context).wallpaper != null)
-            Image.file(
-              Matrix.of(context).wallpaper!,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.medium,
-            ),
-          SafeArea(
-            child: Stack(
+      child: Container(
+        color: controller.responsive.isMobile(context)
+            ? LinagoraSysColors.material().surface
+            : null,
+        child: Stack(
+          children: <Widget>[
+            if (Matrix.of(context).wallpaper != null)
+              Image.file(
+                Matrix.of(context).wallpaper!,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.medium,
+              ),
+            Stack(
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     if (controller.room!.pinnedEventIds.isNotEmpty)
                       const SizedBox(
                         height: ChatViewStyle.pinnedMessageHintHeight,
                       ),
                     Expanded(
-                      child: GestureDetector(
-                        onTap: controller.clearSingleSelectedEvent,
-                        child: ValueListenableBuilder(
-                          valueListenable:
-                              controller.openingChatViewStateNotifier,
-                          builder: (context, viewState, __) {
-                            if (viewState is ViewEventListLoading ||
-                                controller.timeline == null) {
-                              return const ChatLoadingView();
-                            }
+                      child: Container(
+                        color: ChatViewBodyStyle.chatViewBackgroundColor(
+                          context,
+                        ),
+                        child: GestureDetector(
+                          onTap: controller.clearSingleSelectedEvent,
+                          child: ValueListenableBuilder(
+                            valueListenable:
+                                controller.openingChatViewStateNotifier,
+                            builder: (context, viewState, __) {
+                              if (viewState is ViewEventListLoading ||
+                                  controller.timeline == null) {
+                                return const ChatLoadingView();
+                              }
 
-                            if (viewState is ViewEventListSuccess) {
-                              return ChatEventList(
-                                controller: controller,
-                              );
-                            }
+                              if (viewState is ViewEventListSuccess) {
+                                return ChatEventList(
+                                  controller: controller,
+                                );
+                              }
 
-                            return const SizedBox.shrink();
-                          },
+                              return const SizedBox.shrink();
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -76,9 +85,6 @@ class ChatViewBody extends StatelessWidget with MessageContentMixin {
                         controller.room!.membership == Membership.join)
                       Center(
                         child: Container(
-                          constraints: const BoxConstraints(
-                            maxWidth: TwakeThemes.columnWidth * 2.5,
-                          ),
                           alignment: Alignment.center,
                           child: controller.room?.isAbandonedDMRoom == true
                               ? Padding(
@@ -131,7 +137,7 @@ class ChatViewBody extends StatelessWidget with MessageContentMixin {
                                     ],
                                   ),
                                 )
-                              : _inputMessageWidget(),
+                              : _inputMessageWidget(context),
                         ),
                       ),
                   ],
@@ -164,32 +170,42 @@ class ChatViewBody extends StatelessWidget with MessageContentMixin {
                 ),
               ],
             ),
-          ),
-          ValueListenableBuilder(
-            valueListenable: controller.draggingNotifier,
-            builder: (context, dragging, _) {
-              if (!dragging) return const SizedBox.shrink();
-              return Container(
-                color:
-                    Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.upload_outlined,
-                  size: 100,
-                ),
-              );
-            },
-          ),
-        ],
+            ValueListenableBuilder(
+              valueListenable: controller.draggingNotifier,
+              builder: (context, dragging, _) {
+                if (!dragging) return const SizedBox.shrink();
+                return Container(
+                  color: Theme.of(context)
+                      .scaffoldBackgroundColor
+                      .withOpacity(0.9),
+                  alignment: Alignment.center,
+                  child: const Icon(
+                    Icons.upload_outlined,
+                    size: 100,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _inputMessageWidget() {
+  Widget _inputMessageWidget(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
-        maxWidth: ChatViewBodyStyle.chatScreenMaxWidth,
-      ),
+      decoration: controller.responsive.isMobile(context)
+          ? BoxDecoration(
+              color: LinagoraSysColors.material().surface,
+              border: Border(
+                top: BorderSide(
+                  color: LinagoraStateLayer(
+                    LinagoraSysColors.material().surfaceTint,
+                  ).opacityLayer3,
+                ),
+              ),
+            )
+          : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -199,18 +215,21 @@ class ChatViewBody extends StatelessWidget with MessageContentMixin {
             // ReactionsPicker(controller),
             const SizedBox(height: 8.0),
             Padding(
-              padding: ChatViewBodyStyle.inputBarPadding,
+              padding: ChatViewBodyStyle.inputBarPadding(context),
               child: ChatInputRow(controller),
             ),
-            const SizedBox(height: 8),
+            SizedBox(
+              height: controller.responsive.isMobile(context) ? 8.0 : 8.0,
+            ),
           ].map(
             (widget) => widget,
           ),
-          ChatEmojiPicker(
-            showEmojiPickerNotifier: controller.showEmojiPickerNotifier,
-            onEmojiSelected: controller.onEmojiSelected,
-            emojiPickerBackspace: controller.emojiPickerBackspace,
-          ),
+          if (!controller.responsive.isMobile(context))
+            ChatEmojiPicker(
+              showEmojiPickerNotifier: controller.showEmojiPickerNotifier,
+              onEmojiSelected: controller.onEmojiSelected,
+              emojiPickerBackspace: controller.emojiPickerBackspace,
+            ),
         ],
       ),
     );

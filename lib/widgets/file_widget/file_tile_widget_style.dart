@@ -9,10 +9,12 @@ class FileTileWidgetStyle {
   EdgeInsets get paddingFileTileAll =>
       const EdgeInsets.only(left: 8.0, right: 16.0);
 
-  Color get backgroundColor =>
-      LinagoraSysColors.material().surfaceTint.withOpacity(0.08);
+  Color backgroundColor(BuildContext context, {bool ownMessage = false}) =>
+      ownMessage
+          ? LinagoraSysColors.material().primaryContainer
+          : LinagoraSysColors.material().onSurface.withOpacity(0.08);
 
-  BorderRadiusGeometry get borderRadius => BorderRadius.circular(12);
+  BorderRadiusGeometry get borderRadius => BorderRadius.circular(8.0);
 
   EdgeInsets get paddingIcon => const EdgeInsets.only(right: 8);
 

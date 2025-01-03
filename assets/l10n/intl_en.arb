@@ -691,7 +691,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "deleteAccount": "Delete account",
+  "deleteAccount": "Delete Account",
   "@deleteAccount": {
     "type": "text",
     "placeholders": {}
@@ -1347,11 +1347,6 @@
   },
   "notifications": "Notifications",
   "@notifications": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "notificationsEnabledForThisAccount": "Notifications enabled for this account",
-  "@notificationsEnabledForThisAccount": {
     "type": "text",
     "placeholders": {}
   },
@@ -2590,8 +2585,6 @@
   "@upTo100000Members": {},
   "persistentChatHistory": "Persistent Chat history",
   "@persistentChatHistory": {},
-  "multiInteractionThreadedDiscussion": "Multi-interaction threaded discussions",
-  "@multiInteractionThreadedDiscussion": {},
   "addMember": "Add members",
   "@addMember": {},
   "profile": "Profile",
@@ -2847,20 +2840,6 @@
   "@appLanguage": {},
   "chatFolders": "Chat Folders",
   "@chatFolders": {},
-  "settingsChatSubtitle": "Appearance, themes, wallpaper, chat history.",
-  "@settingsChatSubtitle": {},
-  "settingsPrivacyAndSecuritySubtitle": "Block contacts, disappearing messages.",
-  "@settingsPrivacyAndSecuritySubtitle": {},
-  "settingsNotificationAndSoundsSubtitle": "Custom how you get notifications from Twake such as previewing messages, sounds, time,...",
-  "@settingsNotificationAndSoundsSubtitle": {},
-  "settingsChatFoldersSubtitle": "Create and manage folders for different groups of chats and quickly switch between them.",
-  "@settingsChatFoldersSubtitle": {},
-  "settingsAppLanguageSubtitle": "Choose in which language you want to use Twake Chat.",
-  "@settingsAppLanguageSubtitle": {},
-  "settingsDevicesSubtitle": "Control your sign in and sign out on any device.",
-  "@settingsDevicesSubtitle": {},
-  "settingsHelpSubtitle": "Help center, contact us, privacy policy.",
-  "@settingsHelpSubtitle": {},
   "displayName": "Display Name",
   "@displayName": {},
   "bio": "Bio (optional)",
@@ -2969,7 +2948,7 @@
   },
   "settingsLanguageDescription": "Set the language you use on Twake Chat",
   "sendImages": "{count, plural, =1{Send 1 image} other{Send {count} images}}",
-  "enterCaption": "Enter a caption",
+  "enterCaption": "Add a caption...",
   "failToSend": "Failed to send, please try again",
   "showLess": "Show Less",
   "showMore": "Show More",
@@ -3105,6 +3084,7 @@
   "sSwitchCameraLensDirectionLabel": "Switch to the {value} camera",
   "photo": "Photo",
   "video": "Video",
+  "message": "Message",
   "fileTooBig": "The selected file is too large. Please choose a file smaller than {maxSize} MB.",
   "@fileTooBig": {
     "placeholders": {
@@ -3112,5 +3092,16 @@
         "type": "int"
       }
     }
-  }
+  },
+  "enable_notifications": "Enable notifications",
+  "disable_notifications": "Disable notifications",
+  "logoutDialogWarning": "You will lose access to encrypted messages. We recommend that you enable chat backups before logging out",
+  "copyNumber": "Copy number",
+  "callViaCarrier": "Call via Carrier",
+  "scanQrCodeToJoin": "Installation of the mobile application will allow you to contact people from your phone's address book, your chats will be synchronised between devices",
+  "thisFieldCannotBeBlank": "This field cannot be blank",
+  "phoneNumberCopiedToClipboard": "Phone number copied to clipboard",
+  "deleteAccountMessage": "Groups chats that you have created will remain unadministered unless you have given another user administrator rights. Users will still have a history of messages with you. Deleting the account won't help.",
+  "deleteLater": "Delete later",
+  "areYouSureYouWantToDeleteAccount": "Are you sure you want to delete account?"
 }

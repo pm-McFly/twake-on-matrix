@@ -14,8 +14,8 @@ import 'package:fluffychat/utils/date_time_extension.dart';
 import 'package:fluffychat/utils/extension/event_status_custom_extension.dart';
 import 'package:fluffychat/utils/matrix_sdk_extensions/event_extension.dart';
 import 'package:fluffychat/utils/matrix_sdk_extensions/filtered_timeline_extension.dart';
+import 'package:fluffychat/presentation/mixins/message_avatar_mixin.dart';
 import 'package:fluffychat/utils/responsive/responsive_utils.dart';
-import 'package:fluffychat/widgets/avatar/avatar.dart';
 import 'package:fluffychat/widgets/context_menu/context_menu_action.dart';
 import 'package:fluffychat/widgets/swipeable.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +99,7 @@ class Message extends StatefulWidget {
   State<Message> createState() => _MessageState();
 }
 
-class _MessageState extends State<Message> {
+class _MessageState extends State<Message> with MessageAvatarMixin {
   InViewState? inViewState;
 
   final inviewNotifier = ValueNotifier(false);
@@ -187,10 +187,13 @@ class _MessageState extends State<Message> {
             : MainAxisAlignment.start;
 
         final rowChildren = <Widget>[
-          _placeHolderWidget(
-            widget.event.isSameSenderWith(widget.previousEvent),
-            widget.event.isOwnMessage,
-            widget.event,
+          placeHolderWidget(
+            widget.onAvatarTap,
+            event: widget.event,
+            sameSender: widget.event.isSameSenderWith(widget.previousEvent),
+            ownMessage: widget.event.isOwnMessage,
+            context: context,
+            selectMode: widget.selectMode,
           ),
           Expanded(
             child: MessageContentWithTimestampBuilder(
@@ -217,6 +220,7 @@ class _MessageState extends State<Message> {
           children: rowChildren,
         );
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (displayTime)
               ValueListenableBuilder(
@@ -310,30 +314,6 @@ class _MessageState extends State<Message> {
     );
   }
 
-  Widget _placeHolderWidget(bool sameSender, bool ownMessage, Event event) {
-    if (widget.selectMode || event.room.isDirectChat) {
-      return const SizedBox();
-    }
-
-    if (sameSender && !ownMessage) {
-      return FutureBuilder<User?>(
-        future: event.fetchSenderUser(),
-        builder: (context, snapshot) {
-          final user = snapshot.data ?? event.senderFromMemoryOrFallback;
-          return Avatar(
-            size: MessageStyle.avatarSize,
-            fontSize: MessageStyle.fontSize,
-            mxContent: user.avatarUrl,
-            name: user.calcDisplayname(),
-            onTap: () => widget.onAvatarTap!(event),
-          );
-        },
-      );
-    }
-
-    return const SizedBox(width: MessageStyle.avatarSize);
-  }
-
   Widget _messageSelectedWidget(
     BuildContext context,
     Widget child,
@@ -341,7 +321,7 @@ class _MessageState extends State<Message> {
   ) {
     return Container(
       padding: EdgeInsets.only(
-        left: widget.selectMode ? 12.0 : 8.0,
+        left: Message.responsiveUtils.isMobile(context) ? 8.0 : 0,
       ),
       color: widget.selected
           ? LinagoraSysColors.material().secondaryContainer
@@ -354,19 +334,14 @@ class _MessageState extends State<Message> {
           if (widget.selectMode && event.status.isAvailable)
             Align(
               alignment: AlignmentDirectional.centerStart,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 16.0,
-                ),
-                child: Icon(
-                  widget.selected
-                      ? Icons.check_circle_rounded
-                      : Icons.circle_outlined,
-                  color: widget.selected
-                      ? LinagoraSysColors.material().primary
-                      : Colors.black,
-                  size: 20,
-                ),
+              child: Icon(
+                widget.selected
+                    ? Icons.check_circle_rounded
+                    : Icons.circle_outlined,
+                color: widget.selected
+                    ? LinagoraSysColors.material().primary
+                    : Colors.black,
+                size: 20,
               ),
             ),
           Expanded(

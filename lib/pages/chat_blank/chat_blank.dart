@@ -1,10 +1,13 @@
+import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/first_column_inner_routes.dart';
 import 'package:fluffychat/pages/chat_blank/chat_blank_style.dart';
+import 'package:fluffychat/pages/chat_blank/chat_qr_code.dart';
 import 'package:fluffychat/presentation/mixins/go_to_group_chat_mixin.dart';
 import 'package:fluffychat/resource/image_paths.dart';
 import 'package:fluffychat/utils/extension/build_context_extension.dart';
 import 'package:fluffychat/utils/string_extension.dart';
 import 'package:fluffychat/widgets/matrix.dart';
+import 'package:fluffychat/widgets/mixins/popup_menu_widget_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -12,9 +15,7 @@ import 'package:go_router/go_router.dart';
 import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 
 class ChatBlank extends StatelessWidget {
-  final bool loading;
-
-  const ChatBlank({this.loading = false, super.key});
+  const ChatBlank({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +30,20 @@ class ChatBlank extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: ValueListenableBuilder(
         valueListenable: Matrix.of(context).showToMBootstrap,
-        builder: (context, value, _) {
-          if (value) {
+        builder: (context, showToMBootstrap, _) {
+          if (showToMBootstrap) {
             return const SizedBox.shrink();
           }
-          return loading
-              ? _ChatBlankLoading(context: context)
-              : _ChatBlankNotChat(context: context);
+          return ValueListenableBuilder(
+            valueListenable: Matrix.of(context).showQrCodeDownload,
+            builder: (context, showQrCodeDownload, _) {
+              if (showQrCodeDownload &&
+                  AppConfig.qrCodeDownloadUrl.isNotEmpty) {
+                return const ChatQrCode();
+              }
+              return _ChatBlankNotChat(context: context);
+            },
+          );
         },
       ),
     );
@@ -114,18 +122,27 @@ class _ChatBlankRichText extends StatelessWidget with GoToGroupChatMixin {
           MenuItemButton(
             leadingIcon: const Icon(Icons.chat),
             onPressed: goToNewPrivateChat,
-            child: Text(L10n.of(context)!.newDirectMessage),
+            child: Text(
+              L10n.of(context)!.newDirectMessage,
+              style: PopupMenuWidgetStyle.defaultItemTextStyle(context),
+            ),
           ),
           MenuItemButton(
             leadingIcon: const Icon(Icons.group),
             onPressed: () => goToNewGroupChat(
               innerNavigatorContext(),
             ),
-            child: Text(L10n.of(context)!.newChat),
+            child: Text(
+              L10n.of(context)!.newChat,
+              style: PopupMenuWidgetStyle.defaultItemTextStyle(context),
+            ),
           ),
         ],
-        style: const MenuStyle(
+        style: MenuStyle(
           alignment: Alignment.topLeft,
+          backgroundColor: WidgetStatePropertyAll(
+            PopupMenuWidgetStyle.defaultMenuColor(context),
+          ),
         ),
         builder: (context, menuController, _) {
           return InkWell(
@@ -160,23 +177,5 @@ class _ChatBlankRichText extends StatelessWidget with GoToGroupChatMixin {
     } else {
       innerNavigatorContext().push('/rooms/newprivatechat');
     }
-  }
-}
-
-class _ChatBlankLoading extends StatelessWidget {
-  const _ChatBlankLoading({
-    required this.context,
-  });
-
-  final BuildContext context;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: ChatBlankStyle.width(context),
-        child: const LinearProgressIndicator(),
-      ),
-    );
   }
 }

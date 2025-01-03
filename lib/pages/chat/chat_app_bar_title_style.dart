@@ -36,10 +36,12 @@ class ChatAppBarTitleStyle {
           ? Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: LinagoraRefColors.material().tertiary[30],
                 letterSpacing: ChatAppBarTitleStyle.letterSpacingStatusContent,
+                fontFamily: 'Inter',
               )
           : Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: LinagoraRefColors.material().neutral[50],
                 letterSpacing: ChatAppBarTitleStyle.letterSpacingRoomName,
+                fontFamily: 'Inter',
               );
 
   static TextStyle? onlineStatusTextStyle(BuildContext context) =>
@@ -52,4 +54,7 @@ class ChatAppBarTitleStyle {
                 color: LinagoraRefColors.material().secondary[40],
                 letterSpacing: ChatAppBarTitleStyle.letterSpacingRoomName,
               );
+  static const avatarPadding = EdgeInsetsDirectional.only(
+    end: 8,
+  );
 }

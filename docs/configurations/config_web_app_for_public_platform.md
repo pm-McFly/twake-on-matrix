@@ -27,7 +27,11 @@ in [config.sample.json](https://github.com/linagora/twake-on-matrix/blob/main/co
   "app_grid_dashboard_available": true,
   "homeserver": "https://example.com/",
   "platform": "platform"
-  "default_max_upload_avatar_size_in_bytes": 1000000
+  "default_max_upload_avatar_size_in_bytes": 1000000,
+  "dev_mode": false,
+  "qr_code_download_url": "https://example.com/",
+  "enable_logs": true,
+  "support_url": "https://example.com/"
 }
 ```
 
@@ -45,5 +49,9 @@ in [config.sample.json](https://github.com/linagora/twake-on-matrix/blob/main/co
 - `homeserver`: Homeserver
 - `platform`: Platform, `saas` for the case of public platform
 - `default_max_upload_avatar_size_in_bytes`: Default max upload avatar size
+- `dev_mode`: Enable to run app in IDE,
+- `qr_code_download_url`: URL generate QR code to download app
+- `enable_logs`: Enable logs
+- `support_url`: Enable/Disable if you want to show support button with the URL. Default is `https://twake.app/support`
 
 If you want to disable it, please change the value or remove this from `config.sample.json`

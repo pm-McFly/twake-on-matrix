@@ -1,3 +1,83 @@
+## [2.6.14+2330] - 2024-12-06
+### Fixed
+- [Apple rejection] Add Delete Account button in settings
+- [Apple rejection] Remove `Deny` button in permission explaination dialog
+
+## [2.6.13+2330] - 2024-12-06
+### Fixed
+- Loading dialog when signing in/signing up TWP
+- Use appropriate text for permission message
+
+## [2.6.12+2330] - 2024-11-28
+### Changed
+- Enable log for webapp via environment variable
+
+## [2.6.11+2330] - 2024-11-27
+### Fixed
+- Fixed issue when packaging linux
+- Update width button dialog
+- Update input bar for draft chat and chat
+- Update send button for draft chat
+- #2150 Fix confirm button not displaying when changing group avatar
+- #2157 Fix can't mark a chat as unread
+- #2154 Fix no counter of unread messages for muted chats
+### Changed
+- #1927 Change animation for Search screen for mobile
+
+
+## [2.6.10+2330] - 2024-11-20
+### Fixed
+- Handle default QR code link
+
+## [2.6.9+2330] - 2024-11-20
+### Fixed
+
+- #2099 Fix design review v2.6.7
+- #2018 Changed power levels in group chats
+- #2122 Fix group information disappeared
+- #2113 Fix text message overlaps time stamp in message bubble
+- #2124 Fixed wrong url when using logout
+- #1849 Fix bug weird grey counter sometimes appears
+- #2068 Fix can't see message after accept invitation
+- #2065 Remove save to gallery button in web
+
+### Added
+
+- #2014 Display phone number as a clickable in message bubble
+- #2128 Implement QR code to download app
+- #2088 Systemize app bar
+- Improve style for error dialog (#2136)
+- #2046 Add Group name validation
+
+## [2.6.8+2330] - 2024-11-13
+### Changed
+
+- Integrate with TWP production
+
+## [2.6.7+2330] - 2024-10-18
+### Fixed
+
+- Fix redirect path in web app
+
+## [2.6.6+2330] - 2024-10-16
+### Fixed
+
+- Fix cancel button in forward screen on web
+- #2075 Fix upload avatar on web
+- #2067 Fix location path on web
+- Fix wrong highlight message when open chat
+
+### Added
+
+- #2039 Update readme with customized homeserver
+- #2077 Update markdown when send message in chat
+- #2057 Update contacts screen ui
+- #2086 Change texts in settings screen
+- #2082 Update composer UI
+- Added support for nginx port customization
+- Added support for base href customization
+- #2040 Update settings UI
+
 ## [2.6.5+2330] - 2024-09-19
 ### Fixed
 - 2 types of Chat: Chat and Group Chat
@@ -2439,6 +2519,7 @@ interesting devices. If you have one, I would very like to see some screenshots 
 This CHANGELOG.md was generated with [**Changelog for
 Dart**](https://pub.dartlang.org/packages/changelog)
 
+[2.6.6+2330]: https://github.com/linagora/twake-on-matrix/releases/tag/2.6.6
 [2.6.0+2330]: https://github.com/linagora/twake-on-matrix/releases/tag/2.6.0
 [2.5.2+2330]: https://github.com/linagora/twake-on-matrix/releases/tag/2.5.2
 [2.4.20+2330]: https://github.com/linagora/twake-on-matrix/releases/tag/2.4.20

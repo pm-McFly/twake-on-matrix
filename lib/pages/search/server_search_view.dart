@@ -10,6 +10,7 @@ import 'package:fluffychat/pages/chat_list/chat_list_item_title.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/search/empty_search_widget.dart';
 import 'package:flutter/material.dart' hide SearchController;
+import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 import 'package:matrix/matrix.dart';
 
 class ServerSearchMessagesList extends StatelessWidget {
@@ -29,10 +30,11 @@ class ServerSearchMessagesList extends StatelessWidget {
         builder: (context, serverSearchNotifier, child) {
           if (serverSearchNotifier is PresentationServerSideEmptySearch) {
             if (searchController.searchContactAndRecentChatController!
-                .recentAndContactsNotifier.value.isNotEmpty) {
-              return const SizedBox.shrink();
+                    .recentAndContactsNotifier.value.isEmpty &&
+                !(searchController.isSearchMatrixUserId)) {
+              return child!;
             }
-            return child!;
+            return const SizedBox.shrink();
           }
 
           if (serverSearchNotifier is PresentationServerSideSearch) {
@@ -54,12 +56,10 @@ class ServerSearchMessagesList extends StatelessWidget {
                 final event = Event.fromMatrixEvent(searchResult, room);
                 final originServerTs = searchResult.originServerTs;
 
-                return Padding(
-                  padding: ServerSearchViewStyle.paddingListItem,
-                  child: InkWell(
-                    onTap: () =>
-                        context.goToRoomWithEvent(event.room.id, event.eventId),
-                    borderRadius: ServerSearchViewStyle.itemBorderRadius,
+                return TwakeInkWell(
+                  onTap: () =>
+                      context.goToRoomWithEvent(event.room.id, event.eventId),
+                  child: TwakeListItem(
                     child: Padding(
                       padding: ServerSearchViewStyle.paddingInsideListItem,
                       child: Row(

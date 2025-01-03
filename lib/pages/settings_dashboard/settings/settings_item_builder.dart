@@ -4,7 +4,8 @@ import 'package:linagora_design_flutter/linagora_design_flutter.dart';
 
 class SettingsItemBuilder extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final Color? titleColor;
+  final Color? trailingIconColor;
   final IconData leading;
   final VoidCallback onTap;
   final bool isHideTrailingIcon;
@@ -13,43 +14,37 @@ class SettingsItemBuilder extends StatelessWidget {
   const SettingsItemBuilder({
     super.key,
     required this.title,
-    required this.subtitle,
     required this.leading,
     required this.onTap,
     this.isHideTrailingIcon = false,
     this.isSelected = false,
+    this.trailingIconColor,
+    this.titleColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      borderRadius: BorderRadius.circular(SettingsViewStyle.borderRadius),
-      clipBehavior: Clip.hardEdge,
-      color: isSelected
-          ? Theme.of(context).colorScheme.secondaryContainer
-          : LinagoraSysColors.material().onPrimary,
-      child: InkWell(
-        onTap: onTap,
+    return TwakeInkWell(
+      isSelected: isSelected,
+      onTap: onTap,
+      child: SizedBox(
+        height: SettingsViewStyle.settingsItemHeight,
         child: Padding(
           padding: SettingsViewStyle.itemBuilderPadding,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
                 padding: SettingsViewStyle.leadingItemBuilderPadding,
                 child: Icon(
                   leading,
                   size: SettingsViewStyle.iconSize,
-                  color: isHideTrailingIcon
-                      ? Theme.of(context).colorScheme.error
-                      : LinagoraRefColors.material().tertiary[30],
+                  color: trailingIconColor,
                 ),
               ),
               Expanded(
                 child: Row(
-                  crossAxisAlignment: subtitle.isEmpty
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: Column(
@@ -58,32 +53,14 @@ class SettingsItemBuilder extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: isHideTrailingIcon
-                                      ? Theme.of(context).colorScheme.error
-                                      : Theme.of(context).colorScheme.onSurface,
+                            style: LinagoraTextStyle.material()
+                                .bodyMedium2
+                                .copyWith(
+                                  color: titleColor,
+                                  fontFamily: 'Inter',
                                 ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                          ),
-                          Padding(
-                            padding:
-                                SettingsViewStyle.subtitleItemBuilderPadding,
-                            child: Text(
-                              subtitle,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: LinagoraRefColors.material()
-                                        .neutral[40],
-                                  ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
                           ),
                         ],
                       ),

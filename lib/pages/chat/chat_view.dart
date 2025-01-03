@@ -1,4 +1,3 @@
-import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/pages/chat/chat.dart';
 import 'package:fluffychat/pages/chat/chat_app_bar_title.dart';
 import 'package:fluffychat/pages/chat/chat_invitation_body.dart';
@@ -113,11 +112,15 @@ class ChatView extends StatelessWidget with MessageContentMixin {
             future: controller.loadTimelineFuture,
             builder: (BuildContext context, snapshot) {
               return Scaffold(
-                backgroundColor: LinagoraSysColors.material().onPrimary,
+                backgroundColor: controller.responsive.isMobile(context)
+                    ? LinagoraSysColors.material().background
+                    : LinagoraSysColors.material().onPrimary,
                 appBar: AppBar(
-                  backgroundColor: LinagoraSysColors.material().onPrimary,
+                  backgroundColor: controller.responsive.isMobile(context)
+                      ? LinagoraSysColors.material().surface
+                      : LinagoraSysColors.material().onPrimary,
                   automaticallyImplyLeading: false,
-                  toolbarHeight: AppConfig.toolbarHeight(context),
+                  toolbarHeight: ChatViewStyle.appBarHeight(context),
                   title: Padding(
                     padding: ChatViewStyle.paddingLeading(context),
                     child: Row(
@@ -230,12 +233,11 @@ class ChatView extends StatelessWidget with MessageContentMixin {
   }
 
   Widget _buildBackButton(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(left: 8),
+        padding: const EdgeInsets.only(left: 8, right: 8),
         child: TwakeIconButton(
           tooltip: L10n.of(context)!.back,
-          icon: Icons.arrow_back_ios,
+          icon: Icons.chevron_left_outlined,
           onTap: controller.onBackPress,
-          paddingAll: 8.0,
           margin: const EdgeInsets.symmetric(vertical: 12.0),
         ),
       );

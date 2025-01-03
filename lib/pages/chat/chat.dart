@@ -354,12 +354,14 @@ class ChatController extends State<Chat>
 
   Future<void> requestHistory({
     int? historyCount,
+    StateFilter? filter,
   }) async {
     if (!timeline!.canRequestHistory) return;
     Logs().v('Chat::requestHistory(): Requesting history...');
     try {
       return timeline!.requestHistory(
         historyCount: historyCount ?? _loadHistoryCount,
+        filter: filter,
       );
     } catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -1588,7 +1590,7 @@ class ChatController extends State<Chat>
         await room?.join();
         await waitForRoom;
       },
-    );
+    ).then((_) => _tryLoadTimeline());
   }
 
   void onRejectInvitation(BuildContext context) async {
@@ -1732,6 +1734,12 @@ class ChatController extends State<Chat>
     _currentChatScrollState = ChatScrollState.scrolling;
   }
 
+  List<String> get getEventTypeToFilterUnnecessaryEvent => [
+        EventTypes.Message,
+        EventTypes.Encrypted,
+        EventTypes.Sticker,
+      ];
+
   Future<void> _tryRequestHistory() async {
     if (timeline == null) return;
 
@@ -1748,10 +1756,19 @@ class ChatController extends State<Chat>
     if (allMembershipEvents || canRequestHistory) {
       try {
         await requestHistory(historyCount: _defaultEventCountDisplay)
-            .then((response) {
-          Logs().d(
+            .then((response) async {
+          Logs().v(
             'Chat::_tryRequestHistory():: Try request history success',
           );
+          if (allMembershipEvents) {
+            await requestHistory(
+              historyCount: _defaultEventCountDisplay,
+              filter: StateFilter(
+                lazyLoadMembers: true,
+                types: getEventTypeToFilterUnnecessaryEvent,
+              ),
+            );
+          }
         });
       } catch (e) {
         Logs().e(
@@ -1894,7 +1911,9 @@ class ChatController extends State<Chat>
             !selectedEvents.first.isVideoOrImage)
           ChatAppBarActions.saveToDownload,
       ],
-      if (selectedEvents.length == 1 && selectedEvents.first.isVideoOrImage)
+      if (selectedEvents.length == 1 &&
+          selectedEvents.first.isVideoOrImage &&
+          !PlatformInfos.isWeb)
         ChatAppBarActions.saveToGallery,
       ChatAppBarActions.info,
       ChatAppBarActions.report,

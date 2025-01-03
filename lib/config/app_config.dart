@@ -31,6 +31,8 @@ abstract class AppConfig {
   static double bubbleSizeFactor = 1;
   static double fontSizeFactor = 1;
 
+  static const double messagePadding = 16.0;
+
   static String sampleValue = 'sampleValue';
 
   ///`REGISTRATION_URL`: Registration URL for public platform, sample is `https://example.com`
@@ -49,6 +51,14 @@ abstract class AppConfig {
   static String _appPolicy = 'https://twake.app/policy';
 
   static String appTermsOfUse = 'https://twake.app/terms';
+
+  static String qrCodeDownloadUrl = 'https://sign-up.twake.app/download/chat';
+
+  static String twakeChatAppleStore =
+      'https://apps.apple.com/us/app/twake-chat/id6473384641';
+
+  static String twakeChatGooglePlay =
+      'https://play.google.com/store/apps/details?id=app.twake.android.chat';
 
   static double toolbarHeight(BuildContext context) =>
       responsive.isMobile(context) ? 48 : 56;
@@ -72,8 +82,7 @@ abstract class AppConfig {
   static String get webBaseUrl => _webBaseUrl;
   static const String sourceCodeUrl =
       'https://github.com/linagora/twake-on-matrix';
-  static const String supportUrl =
-      'https://github.com/linagora/twake-on-matrix/issues';
+  static String supportUrl = 'https://twake.app/support';
   static bool renderHtml = true;
   static bool hideRedactedEvents = false;
   static bool hideUnknownEvents = true;
@@ -120,9 +129,18 @@ abstract class AppConfig {
   static const imageCompressFormmat = CompressFormat.jpeg;
   static const videoThumbnailFormat = ImageFormat.JPEG;
 
+  static const List<String> allowedExtensionsSupportedAvatar = [
+    'png',
+    'jpg',
+    'jpeg',
+    'jfif',
+  ];
+
   static String? issueId;
 
   static int defaultMaxUploadAvtarSizeInBytes = 10 * (1024 * 1024);
+
+  static bool devMode = false;
 
   static const String appGridConfigurationPath =
       "configurations/app_dashboard.json";
@@ -242,6 +260,18 @@ abstract class AppConfig {
     if (json['default_max_upload_avatar_size_in_bytes'] is int) {
       defaultMaxUploadAvtarSizeInBytes =
           json['default_max_upload_avatar_size_in_bytes'];
+    }
+    if (json['dev_mode'] is bool) {
+      devMode = json['dev_mode'];
+    }
+    if (json['qr_code_download_url'] is String) {
+      qrCodeDownloadUrl = json['qr_code_download_url'];
+    }
+    if (json['enable_logs'] is bool) {
+      DebugUtils.enableLogs = json['enable_logs'];
+    }
+    if (json['support_url'] is String) {
+      supportUrl = json['support_url'];
     }
   }
 }

@@ -28,6 +28,7 @@ class DisplayNameWidget extends StatelessWidget {
               maxCharacters: maxCharactersDisplayNameBubble,
             ),
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontFamily: 'Inter',
                   color: LinagoraSysColors.material().secondary,
                 ),
             maxLines: 2,
